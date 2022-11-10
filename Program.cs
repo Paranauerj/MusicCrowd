@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Amazon.MTurk;
 using Amazon.MTurk.Model;
+using System.Speech.Recognition;
+using System.Globalization;
+using System.Speech.Synthesis;
 
 namespace ProjetoCrowdsourcing
 {
@@ -13,25 +16,25 @@ namespace ProjetoCrowdsourcing
     {
         static async Task Main(string[] args)
         {
-            /* string awsAccessKeyId = "AKIA554JUFFVH4OWVT77";
-             string awsSecretAccessKey = "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"; */
+            var speechInteraction = new SpeechInteraction();
+            var mturkConnector = new MTurkConnector();
 
-            string awsAccessKeyId = ConfigurationManager.AppSettings["AwsAccessKeyId"];
-            string awsSecretAccessKey = ConfigurationManager.AppSettings["AwsSecretAccessKey"];
+            speechInteraction.speechSynthesizer.Speak("Starting project");
 
-            string SANDBOX_URL = "https://mturk-requester-sandbox.us-east-1.amazonaws.com";
-            string PROD_URL = "https://mturk-requester.us-east-1.amazonaws.com";
+            // Recognizes multiple commands. Without the argument, just recognizes one
+            speechInteraction.speechRecoEngine.RecognizeAsync(RecognizeMode.Multiple);
+            Console.WriteLine("Starting to listen commands...");
 
-            AmazonMTurkConfig config = new AmazonMTurkConfig();
-            config.ServiceURL = SANDBOX_URL;
+            // Keep program listening for commands
+            Console.WriteLine("Press any key to stop voice reco.");
+            Console.ReadKey();
 
-            AmazonMTurkClient mturkClient = new AmazonMTurkClient(awsAccessKeyId, awsSecretAccessKey, config);
-            GetAccountBalanceRequest request = new GetAccountBalanceRequest();
+            // Stops recognition
+            speechInteraction.speechRecoEngine.RecognizeAsyncStop();
 
-            GetAccountBalanceResponse balance = await mturkClient.GetAccountBalanceAsync(request);
-            Console.WriteLine("Your account balance is $" + balance.AvailableBalance);
+            Console.WriteLine("Available balance: " + mturkConnector.GetBalance().AvailableBalance);
 
-            // ---------------------- AULA 2 ---------------------------------
+            // ---------------------- AULA 2 --------------------------------- => implementar na classe MTurkConnector
 
             // string questionXML = System.IO.File.ReadAllText(@"C:\Users\jptin\Desktop\question.xml");
             //Console.WriteLine("------");
@@ -65,11 +68,53 @@ namespace ProjetoCrowdsourcing
             Console.WriteLine(listaDeRespostas[0].Answer);*/
 
             // TPC => Implementar XML Parser para tratar dos dados
-            GetAnswersOfHIT(mturkClient, "3ZZAYRN1JJC5HKA7MQGDBZBC8PVTO9");
+            // GetAnswersOfHIT(mturkClient, "3ZZAYRN1JJC5HKA7MQGDBZBC8PVTO9");
 
             // Keep the console window open in debug mode.
-            Console.WriteLine("Press any key to exit.");
+            Console.WriteLine("Press any key to stop voice reco.");
             Console.ReadKey();
+
+        }
+
+        static void SreSpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        {
+            SpeechSynthesizer s = new SpeechSynthesizer();
+            Console.WriteLine("\nSpeech Recognized: \t{0}" + e.Result.Confidence, e.Result.Text);
+
+            if (e.Result.Confidence < 0.85)
+                return;
+
+            switch (e.Result.Text)
+            {
+                case "light on":
+                    light(1);
+                    s.Speak("the light has been turned on.");
+                    break;
+                case "light off":
+                    light(0);
+                    s.Speak("the light has been turned off.");
+                    break;
+                case "fan on":
+                    fan(1);
+                    s.Speak("the fan has been turned on.");
+                    break;
+                case "fan off":
+                    fan(0);
+                    s.Speak("the fan has been turned off.");
+                    break;
+                default:
+
+                    break;
+            }
+        }
+        static void light(int val)
+        {
+            Console.WriteLine("\nSpeech Recognized:light ");
+        }
+
+        static void fan(int val)
+        {
+            Console.WriteLine("\nSpeech Recognized: fan");
         }
 
         public static void GetAnswersOfHIT(AmazonMTurkClient mturkClient, string hitId)
