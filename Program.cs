@@ -76,47 +76,6 @@ namespace ProjetoCrowdsourcing
 
         }
 
-        static void SreSpeechRecognized(object sender, SpeechRecognizedEventArgs e)
-        {
-            SpeechSynthesizer s = new SpeechSynthesizer();
-            Console.WriteLine("\nSpeech Recognized: \t{0}" + e.Result.Confidence, e.Result.Text);
-
-            if (e.Result.Confidence < 0.85)
-                return;
-
-            switch (e.Result.Text)
-            {
-                case "light on":
-                    light(1);
-                    s.Speak("the light has been turned on.");
-                    break;
-                case "light off":
-                    light(0);
-                    s.Speak("the light has been turned off.");
-                    break;
-                case "fan on":
-                    fan(1);
-                    s.Speak("the fan has been turned on.");
-                    break;
-                case "fan off":
-                    fan(0);
-                    s.Speak("the fan has been turned off.");
-                    break;
-                default:
-
-                    break;
-            }
-        }
-        static void light(int val)
-        {
-            Console.WriteLine("\nSpeech Recognized:light ");
-        }
-
-        static void fan(int val)
-        {
-            Console.WriteLine("\nSpeech Recognized: fan");
-        }
-
         public static void GetAnswersOfHIT(AmazonMTurkClient mturkClient, string hitId)
         {
             ListAssignmentsForHITRequest listRequest = new ListAssignmentsForHITRequest();
