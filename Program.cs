@@ -19,7 +19,7 @@ namespace ProjetoCrowdsourcing
             var speechInteraction = new SpeechInteraction();
             var mturkConnector = new MTurkConnector();
 
-            speechInteraction.speechSynthesizer.Speak("Starting project");
+            /*speechInteraction.speechSynthesizer.Speak("Starting project");
 
             // Recognizes multiple commands. Without the argument, just recognizes one
             speechInteraction.speechRecoEngine.RecognizeAsync(RecognizeMode.Multiple);
@@ -34,56 +34,25 @@ namespace ProjetoCrowdsourcing
 
             Console.WriteLine("Available balance: " + mturkConnector.GetBalance().AvailableBalance);
 
-            // ---------------------- AULA 2 --------------------------------- => implementar na classe MTurkConnector
+            var createdHIT = mturkConnector.CreateQuestionOneHIT();
+            Console.WriteLine(mturkConnector.GetURLFromHIT(createdHIT.HIT.HITTypeId) + " ID: " + createdHIT.HIT.HITId);
 
-            // string questionXML = System.IO.File.ReadAllText(@"C:\Users\jptin\Desktop\question.xml");
-            //Console.WriteLine("------");
-            //Console.WriteLine(questionXML);
+            Console.WriteLine("Responde lá, pressiona enter e espera um pouquinho pro server da amazon processar");
+            Console.ReadLine();
+            */
 
-            /*CreateHITRequest hitRequest = new CreateHITRequest();
-
-             hitRequest.Title = "Test Title";
-             hitRequest.Description = "Test Description";
-             hitRequest.Reward = "0.50";
-             hitRequest.AssignmentDurationInSeconds = 60 * 1; // 1 minutos
-             hitRequest.LifetimeInSeconds = 60 * 1; // 1 minuto
-             hitRequest.AutoApprovalDelayInSeconds = 60 * 1; // 1 minuto pra auto approval
-             hitRequest.Question = questionXML;
-             CreateHITResponse hit = mturkClient.CreateHIT(hitRequest);
-             // Show a link to the HIT
-
-             Console.WriteLine(hit.HIT.HITId);
-             Console.WriteLine("https://workersandbox.mturk.com/projects/" + hit.HIT.HITTypeId + "/tasks");*/
-
-            /*GetHITRequest getHit = new GetHITRequest();
-            getHit.HITId = "36FFXPMSUM9FCBJCMWZOXG8OXV0OHU";
-            Console.WriteLine(mturkClient.GetHIT(getHit).HIT.AutoApprovalDelayInSeconds);*/
-
-            /*var hitIdExample = "3ZZAYRN1JJC5HKA7MQGDBZBC8PVTO9";
-            ListAssignmentsForHITRequest listRequest = new ListAssignmentsForHITRequest();
-            listRequest.HITId = hitIdExample;
-            ListAssignmentsForHITResponse listResponse = mturkClient.ListAssignmentsForHITAsync(listRequest).Result;
-            List<Assignment> listaDeRespostas = listResponse.Assignments;
-
-            Console.WriteLine(listaDeRespostas[0].Answer);*/
+            // Exemplo de HITId: 3S829FDFUFMLU4S21R3UP8KJITKXDG
+            // var listaDeRespostas = mturkConnector.GetHITAssignments(createdHIT.HIT.HITId);
+            var listaDeRespostas = mturkConnector.GetHITAssignments("3S829FDFUFMLU4S21R3UP8KJITKXDG");
+            Console.WriteLine(listaDeRespostas[0].Answer);
 
             // TPC => Implementar XML Parser para tratar dos dados
             // GetAnswersOfHIT(mturkClient, "3ZZAYRN1JJC5HKA7MQGDBZBC8PVTO9");
 
             // Keep the console window open in debug mode.
-            Console.WriteLine("Press any key to stop voice reco.");
+            Console.WriteLine("Press any key to stop program");
             Console.ReadKey();
 
-        }
-
-        public static void GetAnswersOfHIT(AmazonMTurkClient mturkClient, string hitId)
-        {
-            ListAssignmentsForHITRequest listRequest = new ListAssignmentsForHITRequest();
-            listRequest.HITId = hitId;
-            ListAssignmentsForHITResponse listResponse = mturkClient.ListAssignmentsForHITAsync(listRequest).Result;
-            List<Assignment> listaDeRespostas = listResponse.Assignments;
-
-            Console.WriteLine(listaDeRespostas[0].Answer);
         }
     }
 }
