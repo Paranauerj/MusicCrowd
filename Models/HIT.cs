@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjetoCrowdsourcing
 {
-    public class Answer
+    public class HIT
     {
     }
 }

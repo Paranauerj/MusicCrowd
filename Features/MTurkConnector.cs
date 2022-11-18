@@ -12,12 +12,12 @@ namespace ProjetoCrowdsourcing
     // Its possible to create more methods of MTurk through mturkClient requests.
     public class MTurkConnector
     {
-        private string awsAccessKeyId { get; } = ConfigurationManager.AppSettings["AwsAccessKeyId"];
-        private string awsSecretAccessKey { get; } = ConfigurationManager.AppSettings["AwsSecretAccessKey"];
+        private string awsAccessKeyId { get; } = "AKIA554JUFFVH4OWVT77";
+        private string awsSecretAccessKey { get; } = "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";
         private string SANDBOX_URL { get; } = "https://mturk-requester-sandbox.us-east-1.amazonaws.com";
         private string PROD_URL { get; } = "https://mturk-requester.us-east-1.amazonaws.com";
         public string url { get; }
-        public AmazonMTurkClient mturkClient { get; }
+        public AmazonMTurkClient mturkClient { get; set; }
 
         public MTurkConnector()
         {
@@ -32,7 +32,7 @@ namespace ProjetoCrowdsourcing
         public GetAccountBalanceResponse GetBalance()
         {
             GetAccountBalanceRequest request = new GetAccountBalanceRequest();
-            GetAccountBalanceResponse balance = this.mturkClient.GetAccountBalance(request);
+            GetAccountBalanceResponse balance = this.mturkClient.GetAccountBalanceAsync(request).Result;
             return balance;
         }
 
@@ -66,7 +66,7 @@ namespace ProjetoCrowdsourcing
             hitRequest.Question = questionXML;
             hitRequest.Keywords = "music,fl studio,accessibility";
 
-            CreateHITResponse hit = mturkClient.CreateHIT(hitRequest);
+            CreateHITResponse hit = mturkClient.CreateHITAsync(hitRequest).Result;
 
             return hit;
         }
@@ -75,7 +75,7 @@ namespace ProjetoCrowdsourcing
         {
             GetHITRequest getHitReq = new GetHITRequest();
             getHitReq.HITId = HITId;
-            return mturkClient.GetHIT(getHitReq);
+            return mturkClient.GetHITAsync(getHitReq).Result;
         }
 
         public List<Assignment> GetHITAssignments(string HITId)
@@ -84,7 +84,7 @@ namespace ProjetoCrowdsourcing
             listRequest.HITId = HITId;
 
             // Podia ser ListAssignmentsForHITAsync(listRequest).Results;
-            ListAssignmentsForHITResponse listResponse = mturkClient.ListAssignmentsForHIT(listRequest);
+            ListAssignmentsForHITResponse listResponse = mturkClient.ListAssignmentsForHITAsync(listRequest).Result;
             List<Assignment> listaDeRespostas = listResponse.Assignments;
 
             return listaDeRespostas;

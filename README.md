@@ -1,2 +1,0 @@
-# MusicCrowd
-Trabalho de Crowdsourcing

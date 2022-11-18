@@ -12,9 +12,9 @@ using System.Speech.Synthesis;
 
 namespace ProjetoCrowdsourcing
 {
-    internal class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var speechInteraction = new SpeechInteraction();
             var mturkConnector = new MTurkConnector();
