@@ -9,6 +9,7 @@ using Amazon.MTurk.Model;
 using System.Speech.Recognition;
 using System.Globalization;
 using System.Speech.Synthesis;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjetoCrowdsourcing
 {
@@ -46,12 +47,16 @@ namespace ProjetoCrowdsourcing
             // Exemplo de HITId: 3S829FDFUFMLU4S21R3UP8KJITKXDG
             // var listaDeRespostas = mturkConnector.GetHITAssignments(createdHIT.HIT.HITId);
 
-            db.HITs.Add(new Models.HIT
+            /*db.HITs.Add(new Models.HIT
             {
                 HITId = "3S829FDFUFMLU4S21R3UP8KJITKXDG"
             });
 
-            //db.SaveChanges();
+            db.SaveChanges();
+            */
+
+            var counted = db.HITs.Include(x => x.Assignments).Where(h => h.HITId == "3S829FDFUFMLU4S21R3UP8KJITKXDG").Count();
+            Console.WriteLine(counted);
 
             var listaDeRespostas = mturkConnector.GetHITAssignments("3S829FDFUFMLU4S21R3UP8KJITKXDG");
             Console.WriteLine(listaDeRespostas[0].Answer);

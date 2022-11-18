@@ -12,7 +12,7 @@ using ProjetoCrowdsourcing;
 namespace ProjetoCrowdsourcing.Migrations
 {
     [DbContext(typeof(BaseContext))]
-    [Migration("20221118160053_fm")]
+    [Migration("20221118164222_fm")]
     partial class fm
     {
         /// <inheritdoc />

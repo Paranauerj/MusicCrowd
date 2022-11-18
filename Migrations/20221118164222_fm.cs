@@ -11,7 +11,7 @@ namespace ProjetoCrowdsourcing.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-           /* migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "HITs",
                 columns: table => new
                 {
@@ -52,7 +52,7 @@ namespace ProjetoCrowdsourcing.Migrations
                 name: "IX_Assignments_HITId",
                 table: "Assignments",
                 column: "HITId");
-        */}
+        }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)

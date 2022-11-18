@@ -15,7 +15,7 @@ namespace ProjetoCrowdsourcing
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.\;Database=ProjetoCrowdsourcing;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=MusicCrowd;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
         }
     }
 }
