@@ -16,6 +16,8 @@ namespace ProjetoCrowdsourcing
     {
         public static async Task Main(string[] args)
         {
+            var db = new BaseContext();
+
             var speechInteraction = new SpeechInteraction();
             var mturkConnector = new MTurkConnector();
 
@@ -43,6 +45,14 @@ namespace ProjetoCrowdsourcing
 
             // Exemplo de HITId: 3S829FDFUFMLU4S21R3UP8KJITKXDG
             // var listaDeRespostas = mturkConnector.GetHITAssignments(createdHIT.HIT.HITId);
+
+            db.HITs.Add(new Models.HIT
+            {
+                HITId = "3S829FDFUFMLU4S21R3UP8KJITKXDG"
+            });
+
+            //db.SaveChanges();
+
             var listaDeRespostas = mturkConnector.GetHITAssignments("3S829FDFUFMLU4S21R3UP8KJITKXDG");
             Console.WriteLine(listaDeRespostas[0].Answer);
 

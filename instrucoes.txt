@@ -1,0 +1,11 @@
+﻿1. Instalar entity framework e dependências
+- Botão direito em cima de ProjetoCrowdsourcing ->
+- Gerenciar de pacotes do NuGet
+- Procurar
+- EntityFrameworkCore, instalar o mais recente
+- EntityFrameworkCore.SqlServer, instalar o mais recente
+- EntityFrameworkCore.Tools, instalar o mais recente
+
+2. Instalar a base de dados
+- Abra o Console do Gerenciador de Pacotes
+- rodar o comando: Update-Database
