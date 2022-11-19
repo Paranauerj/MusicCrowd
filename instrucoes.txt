@@ -1,4 +1,4 @@
-﻿1. Instalar entity framework e dependências
+﻿1. Instalar entity framework e dependências - NÃO É NECESSÁRIO
 - Botão direito em cima de ProjetoCrowdsourcing ->
 - Gerenciar de pacotes do NuGet
 - Procurar
@@ -9,3 +9,5 @@
 2. Instalar a base de dados
 - Abra o Console do Gerenciador de Pacotes
 - rodar o comando: Update-Database
+
+3. Se alguns ficheiros não estiverem aparecendo, é só fechar e abrir o VS

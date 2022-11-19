@@ -34,7 +34,6 @@ namespace ProjetoCrowdsourcing.Migrations
                     AssignmentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Evaluated = table.Column<bool>(type: "bit", nullable: false),
                     IsValid = table.Column<bool>(type: "bit", nullable: false),
-                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HITId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -48,15 +47,45 @@ namespace ProjetoCrowdsourcing.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ValidationHITs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HITId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AssignmentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ValidationHITs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ValidationHITs_Assignments_AssignmentId",
+                        column: x => x.AssignmentId,
+                        principalTable: "Assignments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Assignments_HITId",
                 table: "Assignments",
                 column: "HITId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ValidationHITs_AssignmentId",
+                table: "ValidationHITs",
+                column: "AssignmentId",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ValidationHITs");
+
             migrationBuilder.DropTable(
                 name: "Assignments");
 

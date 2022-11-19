@@ -12,6 +12,7 @@ namespace ProjetoCrowdsourcing
     { 
         public DbSet<Models.HIT> HITs { get; set; }
         public DbSet<Models.Assignment> Assignments { get; set; }
+        public DbSet<Models.ValidationHIT> ValidationHITs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

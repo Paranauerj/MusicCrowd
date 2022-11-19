@@ -46,12 +46,19 @@ namespace ProjetoCrowdsourcing
             return newHIT;
         }
 
-        public string GetURLFromHIT(string HITTypeId)
+        public CreateHITResponse CreateQuestionOneValidationHIT()
+        {
+            var newHIT = this.CreateHIT("question1validation.xml", "Titulo de validacao", "Descricao de validacao", "0.10");
+
+            return newHIT;
+        }
+
+        public static string GetURLFromHIT(string HITTypeId)
         {
             return "https://workersandbox.mturk.com/projects/" + HITTypeId + "/tasks";
         }
 
-        private CreateHITResponse CreateHIT(string filename, string title, string description, string reward)
+        public CreateHITResponse CreateHIT(string filename, string title, string description, string reward)
         {
             string questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\..\..\Questions\" + filename);
 
@@ -60,7 +67,7 @@ namespace ProjetoCrowdsourcing
             hitRequest.Title = title;
             hitRequest.Description = description;
             hitRequest.Reward = reward;
-            hitRequest.AssignmentDurationInSeconds = 60 * 1; // 1 minuto para o worker completar o HIT
+            hitRequest.AssignmentDurationInSeconds = 60 * 10; // 10 minuto para o worker completar o HIT
             hitRequest.LifetimeInSeconds = 60 * 60 * 24; // 1 dia para ficar indisponível
             hitRequest.AutoApprovalDelayInSeconds = 60 * 1; // 1 minuto pra auto approval
             hitRequest.Question = questionXML;

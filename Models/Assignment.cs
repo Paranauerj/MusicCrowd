@@ -22,12 +22,17 @@ namespace ProjetoCrowdsourcing.Models
         [Required]
         public bool IsValid { get; set; } = false;
 
-        [Required]
-        public string Answer { get; set; }
-
+        /// <summary>
+        ///     HITId é o ID do HIT respondido por este assignment
+        /// </summary>
         [ForeignKey("HIT")]
         public int HITId { get; set; }
         public HIT HIT { get; set; }
+
+        /// <summary>
+        ///     ValidationHIT é o HIT gerado que validará este assignment
+        /// </summary>
+        public ValidationHIT ValidationHIT { get; set; }
 
     }
 }

@@ -47,22 +47,46 @@ namespace ProjetoCrowdsourcing
             // Exemplo de HITId: 3S829FDFUFMLU4S21R3UP8KJITKXDG
             // var listaDeRespostas = mturkConnector.GetHITAssignments(createdHIT.HIT.HITId);
 
-            /*db.HITs.Add(new Models.HIT
+            db.HITs.Add(new Models.HIT
             {
                 HITId = "3S829FDFUFMLU4S21R3UP8KJITKXDG"
             });
 
             db.SaveChanges();
-            */
 
-            var counted = db.HITs.Include(x => x.Assignments).Where(h => h.HITId == "3S829FDFUFMLU4S21R3UP8KJITKXDG").Count();
-            Console.WriteLine(counted);
+            var assigId = mturkConnector.GetHITAssignments("3S829FDFUFMLU4S21R3UP8KJITKXDG")[0].AssignmentId;
+            db.Assignments.Add(new Models.Assignment
+            {
+                AssignmentId = assigId,
+                HITId = 1
+            });
 
-            var listaDeRespostas = mturkConnector.GetHITAssignments("3S829FDFUFMLU4S21R3UP8KJITKXDG");
-            Console.WriteLine(listaDeRespostas[0].Answer);
+            db.SaveChanges();
+
+            db.ValidationHITs.Add(new Models.ValidationHIT
+            {
+                AssignmentId = 1,
+                HITId = "any"
+            });
+
+            db.SaveChanges();
+
+            /*var counted = db.HITs.Include(x => x.Assignments).Where(h => h.HITId == "3S829FDFUFMLU4S21R3UP8KJITKXDG").Count();
+            Console.WriteLine(counted);*/
+
+            /*var listaDeRespostas = mturkConnector.GetHITAssignments("3S829FDFUFMLU4S21R3UP8KJITKXDG");
+            Console.WriteLine(listaDeRespostas[0].Answer);*/
+
+            // Console.WriteLine(mturkConnector.GetURLFromHIT(mturkConnector.GetHITDetails("3S829FDFUFMLU4S21R3UP8KJITKXDG").HIT.HITTypeId));
+
+            /*
+             * TODO:
+             * Após gerar o HIT, criar task paralela que vai pesquisar respostas ao HIT a cada n segundos
+             * Quando achar uma resposta, cria HIT para validá-la e cria task paralela para procurar resposta a cada n segundos
+             * Quando achar resposta, caso seja válida, marcar a resposta original como válida e apresentar ao utilizador.
+             */
 
             // TPC => Implementar XML Parser para tratar dos dados
-            // GetAnswersOfHIT(mturkClient, "3ZZAYRN1JJC5HKA7MQGDBZBC8PVTO9");
 
             // Keep the console window open in debug mode.
             Console.WriteLine("Press any key to stop program");

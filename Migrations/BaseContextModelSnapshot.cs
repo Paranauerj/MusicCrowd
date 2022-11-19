@@ -30,10 +30,6 @@ namespace ProjetoCrowdsourcing.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("AssignmentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -74,6 +70,32 @@ namespace ProjetoCrowdsourcing.Migrations
                     b.ToTable("HITs");
                 });
 
+            modelBuilder.Entity("ProjetoCrowdsourcing.Models.ValidationHIT", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("HITId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignmentId")
+                        .IsUnique();
+
+                    b.ToTable("ValidationHITs");
+                });
+
             modelBuilder.Entity("ProjetoCrowdsourcing.Models.Assignment", b =>
                 {
                     b.HasOne("ProjetoCrowdsourcing.Models.HIT", "HIT")
@@ -83,6 +105,23 @@ namespace ProjetoCrowdsourcing.Migrations
                         .IsRequired();
 
                     b.Navigation("HIT");
+                });
+
+            modelBuilder.Entity("ProjetoCrowdsourcing.Models.ValidationHIT", b =>
+                {
+                    b.HasOne("ProjetoCrowdsourcing.Models.Assignment", "Assignment")
+                        .WithOne("ValidationHIT")
+                        .HasForeignKey("ProjetoCrowdsourcing.Models.ValidationHIT", "AssignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+                });
+
+            modelBuilder.Entity("ProjetoCrowdsourcing.Models.Assignment", b =>
+                {
+                    b.Navigation("ValidationHIT")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjetoCrowdsourcing.Models.HIT", b =>
