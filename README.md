@@ -3,7 +3,9 @@ O poder do Crowdsourcing na assistência de produtores musicais com deficiência
 
 ### O Projeto
 Esta plataforma destina-se ao auxílio de pessoas com deficiência visual na busca por material musical para composição de obras autorais, recorrendo aos recursos da Crowd.
+
 A plataforma utilizada é o .NET Core Console Application, onde o utilizador abre o programa, solicita informação por voz e recebe, também, por voz, os resultados enviados pela crowd do Amazon MTurk.
+
 Para um funcionamento correto do sintetizador e reconhecedor de voz, é necessário instalar o idioma en-US no Windows, em Definições -> Hora e Idioma -> Idioma -> Adicionar um  Idioma -> Inglês (Estados Unidos) e adicionar todas as opções.
 
 #### Tech Stack
