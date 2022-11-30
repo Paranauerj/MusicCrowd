@@ -7,20 +7,118 @@
       <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
       <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'> .
       </script>
+	  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.142.0.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	  <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
     </head>
     <body>
       <form name='mturk_form' method='post' id='mturk_form' action='https://www.mturk.com/mturk/externalSubmit'>
         <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
 		
+		<input type='hidden' value='' name='fileName' id='fileName'/>
+
         <h1>This is a test question - make your comment</h1>
         <p><textarea name='comment' cols='80' rows='3'></textarea></p>
 		
 		<h1>Whats your opinion about ur comment?</h1>
         <p><input name='opinion' cols='80' rows='3'></input></p>
 		
+		<div style="padding: 10px;">
+          <input id="file" type="file" accept=".mp3, .wav, .aac, .ogg" required/>
+          <button id="upload_file_button" type="button">Upload file</button>
+          <span id="status">&nbsp;</span>
+        </div>
+		
         <p><input type='submit' id='submitButton' value='Submit' /></p></form>
         <script language='Javascript'>turkSetAssignmentID();
         </script>
+		
+		<script>
+		
+          var albumBucketName = "mturk-worker-uploads-musiccrowd-utad";
+          var bucketRegion = "us-east-1";
+          var IdentityPoolId = "us-east-1:71c30ffb-c2bb-460c-903a-4504f1f386f5";
+          var uploadStatus = "none";
+
+          AWS.config.update({
+            region: bucketRegion,
+            credentials: new AWS.CognitoIdentityCredentials({
+              IdentityPoolId: IdentityPoolId
+            })
+          });
+
+          var s3 = new AWS.S3({
+            apiVersion: "2006-03-01",
+            params: { Bucket: albumBucketName }
+          });
+
+          function uploadFile(){
+            var files = document.getElementById("file").files;
+            if (!files.length) {
+              $("#status").text("Please choose a file to upload first.");
+              return;
+            }
+            var file = files[0];
+            var fileName = file.name;
+            fileName = encodeFilename(fileName);
+
+            var photoKey = fileName;
+            
+            // Use S3 ManagedUpload class as it supports multipart uploads
+            var upload = new AWS.S3.ManagedUpload({
+              params: {
+                Bucket: albumBucketName,
+                Key: photoKey,
+                Body: file,
+                ContentType: "audio/mpeg"
+              }
+            });
+
+            $("#status").text("Uploading...");
+            uploadStatus = "uploading";
+            
+            var promise = upload.promise();
+
+            promise.then(
+              function(data) {
+                $("#status").text("Success.");
+                document.getElementById("fileName").value = fileName;
+                uploadStatus = "done";
+              },
+              function(err) {
+                uploadStatus = "error";
+                $("#status").text("Error while uploading your file", err.message);
+              }
+            );
+
+          }
+
+          function uniqid(prefix = "", random = false) {
+            const sec = Date.now() * 1000 + Math.random() * 1000;
+            const id = sec.toString(16).replace(/\./g, "").padEnd(14, "0");
+            return `${prefix}${id}${random ? `.${Math.trunc(Math.random() * 100000000)}`:""}`;
+          };
+
+          function encodeFilename(filename){
+            var extension = filename.split('.').pop();
+            return uniqid() + "." + extension;
+          }
+
+          $("#upload_file_button").click(function() {
+            uploadFile();
+          });
+
+          window.onload = function() {document.getElementById('submitButton').setAttribute('onclick', 'return validateForm()'); }
+
+          function validateForm() {
+            if (uploadStatus != "done"){
+              return false;
+            }
+            return true;
+          }
+
+        </script>
+
       </body>
     </html>
     ]]>

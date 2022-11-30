@@ -18,9 +18,11 @@ namespace ProjetoCrowdsourcing
         private string PROD_URL { get; } = "https://mturk-requester.us-east-1.amazonaws.com";
         public string url { get; }
         public AmazonMTurkClient mturkClient { get; set; }
+        private BaseContext db { get; set; }
 
-        public MTurkConnector()
+        public MTurkConnector(BaseContext db)
         {
+            this.db = db;
             this.url = this.SANDBOX_URL;
 
             AmazonMTurkConfig config = new AmazonMTurkConfig();
@@ -39,6 +41,13 @@ namespace ProjetoCrowdsourcing
         public CreateHITResponse CreateQuestionOneHIT()
         {
             var newHIT = this.CreateHIT("question1.xml", "Titulo de teste", "Descricao de teste", "0.50");
+
+            db.HITs.Add(new Models.HIT
+            {
+                HITId = newHIT.HIT.HITId
+            });
+
+            db.SaveChanges();
 
             // Link gerado para o HIT
             // Console.WriteLine(this.GetURLFromHIT(newHIT.HIT.HITTypeId));
@@ -60,7 +69,7 @@ namespace ProjetoCrowdsourcing
 
         public CreateHITResponse CreateHIT(string filename, string title, string description, string reward)
         {
-            string questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\..\..\Questions\" + filename);
+            string questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\..\..\..\Questions\" + filename);
 
             CreateHITRequest hitRequest = new CreateHITRequest();
 

@@ -17,10 +17,13 @@ namespace ProjetoCrowdsourcing
     {
         public static async Task Main(string[] args)
         {
+            // Ótimo tutorial
+            // https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html
+
             var db = new BaseContext();
 
             var speechInteraction = new SpeechInteraction();
-            var mturkConnector = new MTurkConnector();
+            var mturkConnector = new MTurkConnector(db);
 
             /*speechInteraction.speechSynthesizer.Speak("Starting project");
 
@@ -47,7 +50,7 @@ namespace ProjetoCrowdsourcing
             // Exemplo de HITId: 3S829FDFUFMLU4S21R3UP8KJITKXDG
             // var listaDeRespostas = mturkConnector.GetHITAssignments(createdHIT.HIT.HITId);
 
-            db.HITs.Add(new Models.HIT
+            /*db.HITs.Add(new Models.HIT
             {
                 HITId = "3S829FDFUFMLU4S21R3UP8KJITKXDG"
             });
@@ -69,7 +72,7 @@ namespace ProjetoCrowdsourcing
                 HITId = "any"
             });
 
-            db.SaveChanges();
+            db.SaveChanges();*/
 
             /*var counted = db.HITs.Include(x => x.Assignments).Where(h => h.HITId == "3S829FDFUFMLU4S21R3UP8KJITKXDG").Count();
             Console.WriteLine(counted);*/
@@ -78,6 +81,17 @@ namespace ProjetoCrowdsourcing
             Console.WriteLine(listaDeRespostas[0].Answer);*/
 
             // Console.WriteLine(mturkConnector.GetURLFromHIT(mturkConnector.GetHITDetails("3S829FDFUFMLU4S21R3UP8KJITKXDG").HIT.HITTypeId));
+
+            /*var hit = mturkConnector.CreateQuestionOneHIT();
+            Console.WriteLine(MTurkConnector.GetURLFromHIT(hit.HIT.HITTypeId));*/
+
+            var latestHIT = db.HITs.OrderBy(x => x.CreationDate).Last();
+            var assignmentsFromLatestHIT = mturkConnector.GetHITAssignments(latestHIT.HITId);
+
+            foreach(var assignment in assignmentsFromLatestHIT)
+            {
+                Console.WriteLine(assignment.Answer);
+            }
 
             /*
              * TODO:
@@ -89,8 +103,8 @@ namespace ProjetoCrowdsourcing
             // TPC => Implementar XML Parser para tratar dos dados
 
             // Keep the console window open in debug mode.
-            Console.WriteLine("Press any key to stop program");
-            Console.ReadKey();
+            /*Console.WriteLine("Press any key to stop program");
+            Console.ReadKey();*/
 
         }
     }
