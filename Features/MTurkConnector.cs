@@ -61,7 +61,7 @@ namespace ProjetoCrowdsourcing
             parameters.Add("$$__filename__$$", filename);
             parameters.Add("$$__artist__$$", artist);
 
-            var newHIT = this.CreateHIT("question1validation.xml", "Titulo de validacao", "Descricao de validacao", "0.10", parameters);
+            var newHIT = this.CreateHIT("question1validation.xml", "Evaluate a song sample", "Evaluate a sample and answer a little few questions about it", "0.10", parameters);
 
             return newHIT;
         }
@@ -88,7 +88,7 @@ namespace ProjetoCrowdsourcing
             hitRequest.Title = title;
             hitRequest.Description = description;
             hitRequest.Reward = reward;
-            hitRequest.AssignmentDurationInSeconds = 60 * 10; // 10 minuto para o worker completar o HIT
+            hitRequest.AssignmentDurationInSeconds = 60 * 10; // 10 minutos para o worker completar o HIT
             hitRequest.LifetimeInSeconds = 60 * 60 * 24; // 1 dia para ficar indisponível
             hitRequest.AutoApprovalDelayInSeconds = 60 * 1; // 1 minuto pra auto approval
             hitRequest.Question = questionXML;
