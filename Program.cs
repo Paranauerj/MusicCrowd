@@ -85,13 +85,17 @@ namespace ProjetoCrowdsourcing
             /*var hit = mturkConnector.CreateQuestionOneHIT();
             Console.WriteLine(MTurkConnector.GetURLFromHIT(hit.HIT.HITTypeId));*/
 
-            var latestHIT = db.HITs.OrderBy(x => x.CreationDate).Last();
-            var assignmentsFromLatestHIT = mturkConnector.GetHITAssignments(latestHIT.HITId);
-
-            foreach(var assignment in assignmentsFromLatestHIT)
+            // var latestHIT = db.HITs.OrderBy(x => x.CreationDate).Last();
+            // var assignmentsFromLatestHIT = mturkConnector.GetHITAssignments(latestHIT.HITId);
+            /*var assignmentsFromLatestHIT = mturkConnector.GetHITAssignments("3NI0WFPPJM1EC57COS69AONGR9P60X");
+            foreach (var assignment in assignmentsFromLatestHIT)
             {
                 Console.WriteLine(assignment.Answer);
-            }
+            }*/
+
+            /*var hit = mturkConnector.CreateQuestionOneValidationHIT("Perfect - Ed Sheeran.mp3", "Ed Sheeran");
+            Console.WriteLine(MTurkConnector.GetURLFromHIT(hit.HIT.HITTypeId));*/
+
 
             /*
              * TODO:

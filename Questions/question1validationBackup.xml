@@ -1,0 +1,142 @@
+﻿<HTMLQuestion xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2011-11-11/HTMLQuestion.xsd">
+	<HTMLContent>
+		<![CDATA[
+  <!DOCTYPE html>
+    <html>
+    <head>
+      <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+      <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'> .
+      </script>
+      <script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
+
+
+	    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.142.0.min.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+      <script src="https://cdn.jsdelivr.net/gh/ethereumjs/browser-builds/dist/ethereumjs-tx/ethereumjs-tx-1.3.3.min.js"></script>
+	    <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+      
+      <style>
+        .regularSize{
+          font-size: small;
+        }
+        .formDivision{
+          padding: 10px; 
+          font-size: small;
+        }
+      </style>
+    </head>
+    <body>
+
+      <crowd-form name='mturk_form' method='post' id='mturk_form' action='https://www.mturk.com/mturk/externalSubmit'>
+        <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+		
+        <full-instructions header="Audio Evaluation Instructions">
+          <p><strong>7-10</strong> Audio quality is excellent or has some little background noises. Notes played have a few or any mistakes</p>
+          <p><strong>4-7</strong> Audio quality is not bad, but background noises are noticeable and impact the experience. There are some wrong played notes, but are not that impactant.</p>
+          <p><strong>1-4</strong>: Audio quality is poor, the content is clearly troll or the sample has so many mistakes that it is impossible to have any further usage</p>
+          <p>When the sentiment is mixed, such as good audio quality and bad notes, do an average evaluation</p>
+        </full-instructions>
+  
+        <short-instructions>
+          <p>Evaluate the sample by its quality, including both audio and song quality. For example, background noises should decrease the evaluation, as well as many notes played badly.</p>
+          <p>If you don't know who is the artist or band, select "I do not know" on the last question</p>
+        </short-instructions>
+
+        <h4>Listen to the sample bellow</h4>
+        <div style="padding: 10px;">
+          <p>
+            <audio controls="" controlsList="nodownload" style="width: 100%" id="sample_to_validate">
+              <source src="" type="audio/mpeg" id="sample_to_validate_source"/>
+            </audio>
+          </p>
+        </div>
+
+        <div class="formDivision">
+          <p class="regularSize">On a scale of 1-10, what is the audio quality of this sample? (1: too much background noise, 10: perfect) <span style="color:red">*</span></p>
+          <crowd-slider name="sampleQuality" min="1" max="10" step="1" pin="true" required></crowd-slider>
+        </div>
+
+        <div class="formDivision">
+          <p class="regularSize">Do you know the artist/band that created this sample? <span style="color:red">*</span></p>
+          <div>
+            <input type="radio" id="yesOption1" name="knowTheArtist" value="yes" required>
+            <label for="yesOption1">Yes</label>
+          </div>
+          <div>
+            <input type="radio" id="noOption1" name="knowTheArtist" value="no">
+            <label for="noOption1">No</label>
+          </div>
+        </div>
+
+        <div class="formDivision">
+          <p class="regularSize">Is the following artist/band the creator of this sample? <span style="color:red">*</span><h5>Banda123</h5></p>
+          <div>
+            <input type="radio" id="yesOption2" name="confirmArtist" value="yes" required>
+            <label for="yesOption2">Yes</label>
+          </div>
+          <div>
+            <input type="radio" id="noOption2" name="confirmArtist" value="no">
+            <label for="noOption2">No</label>
+          </div>
+          <div>
+            <input type="radio" id="dontKnow2" name="confirmArtist" value="dontKnow">
+            <label for="dontKnow2">I Do not know</label>
+          </div>
+        </div>
+
+            <!--<p><input type='submit' id='submitButton' value='Submit'/></p>-->
+          
+      </crowd-form>
+        
+      <script language='Javascript'>turkSetAssignmentID();
+      </script>
+		
+		  <script>
+        var albumBucketName = "mturk-worker-uploads-musiccrowd-utad";
+        var bucketRegion = "us-east-1";
+        var IdentityPoolId = "us-east-1:71c30ffb-c2bb-460c-903a-4504f1f386f5";
+
+        // se for necessário pegar o áudio em si, não a URL
+        /*AWS.config.update({
+          region: bucketRegion,
+          credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: IdentityPoolId
+          })
+        });
+
+        var s3 = new AWS.S3({
+          apiVersion: "2006-03-01",
+          params: { Bucket: albumBucketName }
+        });*/
+
+        var audio = document.getElementById('sample_to_validate');
+        var source = document.getElementById('sample_to_validate_source');
+
+        // se for necessário pegar o áudio em si, não a URL
+        /*s3.getObject({
+              Key: "5eea6c8cd818f4.mp3"
+        }, function(err, data){
+          // console.log(data, err);
+          source.src = "data:audio/mpeg;base64," + encode(data.Body);
+          audio.load();
+        });*/
+
+        //https://mturk-worker-uploads-musiccrowd-utad.s3.us-east-1.amazonaws.com/5eea6c8cd818f4.mp3
+        source.src = "https://" + albumBucketName + ".s3." + bucketRegion + ".amazonaws.com/" + "5eea6c8cd818f4.mp3";
+        audio.load();
+        
+        function encode(data) {
+          let buf = ethereumjs.Buffer.Buffer.from(data);
+          let base64 = buf.toString("base64");
+          return base64;
+        }
+
+      </script>
+
+      </body>
+    </html>
+    ]]>
+	</HTMLContent>
+	<FrameHeight>450</FrameHeight>
+</HTMLQuestion>

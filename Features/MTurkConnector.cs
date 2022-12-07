@@ -40,7 +40,7 @@ namespace ProjetoCrowdsourcing
 
         public CreateHITResponse CreateQuestionOneHIT()
         {
-            var newHIT = this.CreateHIT("question1.xml", "Titulo de teste", "Descricao de teste", "0.50");
+            var newHIT = this.CreateHIT("question1.xml", "Titulo de teste", "Descricao de teste", "0.50", null);
 
             db.HITs.Add(new Models.HIT
             {
@@ -55,9 +55,13 @@ namespace ProjetoCrowdsourcing
             return newHIT;
         }
 
-        public CreateHITResponse CreateQuestionOneValidationHIT()
+        public CreateHITResponse CreateQuestionOneValidationHIT(string filename, string artist)
         {
-            var newHIT = this.CreateHIT("question1validation.xml", "Titulo de validacao", "Descricao de validacao", "0.10");
+            var parameters = new Dictionary<string, string>();
+            parameters.Add("$$__filename__$$", filename);
+            parameters.Add("$$__artist__$$", artist);
+
+            var newHIT = this.CreateHIT("question1validation.xml", "Titulo de validacao", "Descricao de validacao", "0.10", parameters);
 
             return newHIT;
         }
@@ -67,10 +71,18 @@ namespace ProjetoCrowdsourcing
             return "https://workersandbox.mturk.com/projects/" + HITTypeId + "/tasks";
         }
 
-        public CreateHITResponse CreateHIT(string filename, string title, string description, string reward)
+        public CreateHITResponse CreateHIT(string filename, string title, string description, string reward, Dictionary<string, string>? parameters)
         {
             string questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\..\..\..\Questions\" + filename);
 
+            if(parameters != null)
+            {
+                foreach (var parameter in parameters)
+                {
+                    questionXML = questionXML.Replace(parameter.Key, parameter.Value);
+                }
+            }
+            
             CreateHITRequest hitRequest = new CreateHITRequest();
 
             hitRequest.Title = title;
