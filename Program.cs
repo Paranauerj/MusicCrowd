@@ -10,6 +10,8 @@ using System.Speech.Recognition;
 using System.Globalization;
 using System.Speech.Synthesis;
 using Microsoft.EntityFrameworkCore;
+using System.Xml;
+using Newtonsoft.Json;
 
 namespace ProjetoCrowdsourcing
 {
@@ -82,15 +84,40 @@ namespace ProjetoCrowdsourcing
 
             // Console.WriteLine(mturkConnector.GetURLFromHIT(mturkConnector.GetHITDetails("3S829FDFUFMLU4S21R3UP8KJITKXDG").HIT.HITTypeId));
 
-            /*var hit = mturkConnector.CreateQuestionOneHIT();
+            /*var hit = mturkConnector.CreateQuestionOneHIT("Electric Guitar");
             Console.WriteLine(MTurkConnector.GetURLFromHIT(hit.HIT.HITTypeId));*/
 
-            // var latestHIT = db.HITs.OrderBy(x => x.CreationDate).Last();
+            var hitsStored = db.HITs.OrderBy(x => x.CreationDate);
             // var assignmentsFromLatestHIT = mturkConnector.GetHITAssignments(latestHIT.HITId);
-            /*var assignmentsFromLatestHIT = mturkConnector.GetHITAssignments("3NI0WFPPJM1EC57COS69AONGR9P60X");
-            foreach (var assignment in assignmentsFromLatestHIT)
+            // var assignmentsFromLatestHIT = mturkConnector.GetHITAssignments("3NI0WFPPJM1EC57COS69AONGR9P60X");
+            /*foreach (var hit in hitsStored)
             {
-                Console.WriteLine(assignment.Answer);
+                var assignments = mturkConnector.GetHITAssignments(hit.HITId);
+                Console.WriteLine(hit.HITId + "(" + hit.CreationDate.ToString() + "): " + assignments.Count);
+                foreach(var assignment in assignments)
+                {
+                    // Console.WriteLine(assignment.Answer);
+                    XmlDocument xmlDoc = new XmlDocument();
+                    xmlDoc.LoadXml(assignment.Answer);
+                    var answerJSON = xmlDoc.InnerText.ToString();
+                    answerJSON = answerJSON.Replace("taskAnswers", "");
+                    answerJSON = answerJSON.Remove(0, 1);
+                    answerJSON = answerJSON.Remove(answerJSON.Length - 1, 1);
+
+                    try
+                    {
+                        Question1Response deserializedProduct = JsonConvert.DeserializeObject<Question1Response>(answerJSON);
+                        Console.WriteLine(MTurkConnector.GetURLFromFileName(deserializedProduct.filename));
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+
+
+                }
+                Console.WriteLine("--------------------------------------");
             }*/
 
             /*var hit = mturkConnector.CreateQuestionOneValidationHIT("Perfect - Ed Sheeran.mp3", "Ed Sheeran");

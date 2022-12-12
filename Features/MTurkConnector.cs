@@ -38,9 +38,12 @@ namespace ProjetoCrowdsourcing
             return balance;
         }
 
-        public CreateHITResponse CreateQuestionOneHIT()
+        public CreateHITResponse CreateQuestionOneHIT(string instrument)
         {
-            var newHIT = this.CreateHIT("question1.xml", "Titulo de teste", "Descricao de teste", "0.50", null);
+            var parameters = new Dictionary<string, string>();
+            parameters.Add("$$__instrument__$$", instrument);
+
+            var newHIT = this.CreateHIT("question1.xml", "Titulo de teste", "Descricao de teste", "0.50", parameters);
 
             db.HITs.Add(new Models.HIT
             {
@@ -69,6 +72,11 @@ namespace ProjetoCrowdsourcing
         public static string GetURLFromHIT(string HITTypeId)
         {
             return "https://workersandbox.mturk.com/projects/" + HITTypeId + "/tasks";
+        }
+
+        public static string GetURLFromFileName(string filename)
+        {
+            return "https://mturk-worker-uploads-musiccrowd-utad.s3.us-east-1.amazonaws.com/" + filename;
         }
 
         public CreateHITResponse CreateHIT(string filename, string title, string description, string reward, Dictionary<string, string>? parameters)

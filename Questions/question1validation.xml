@@ -58,6 +58,13 @@
         </div>
 
         <div class="formDivision">
+          <p class="regularSize">What is the instrument playing <span style="color:red">*</span></p>
+          <select name="instrument" id="instruments" required>
+            <option value="none" selected>None Of Them</option>
+          </select>
+        </div>
+
+        <div class="formDivision">
           <p class="regularSize">Do you know the artist/band that created this sample? <span style="color:red">*</span></p>
           <div>
             <input type="radio" id="yesOption1" name="knowTheArtist" value="yes" required>
@@ -92,6 +99,29 @@
       <script language='Javascript'>turkSetAssignmentID();
       </script>
 		
+      <script>
+        var selectElement = document.getElementById('instruments');
+        var options = ["electric guitar", "classic guitar", "piano", "bass", "violin", "drums", "saxophone", "flute"];
+
+        options.forEach(item => {
+          option = document.createElement('option');
+          option.value = item;
+          option.text = capitalizeFirstLetters(item);
+          selectElement.add(option);
+        });
+
+        function capitalizeFirstLetters(str){
+          const arr = str.split(" ");
+          for (var i = 0; i < arr.length; i++) {
+              arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+
+          }
+          const str2 = arr.join(" ");
+          return str2;
+        }
+        
+      </script>
+
 		  <script>
         var albumBucketName = "mturk-worker-uploads-musiccrowd-utad";
         var bucketRegion = "us-east-1";

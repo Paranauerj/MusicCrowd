@@ -7,38 +7,93 @@
       <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
       <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'> .
       </script>
-	  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.142.0.min.js"></script>
+
+      <script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
+
+	    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.142.0.min.js"></script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	  <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+	    <link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+
+      <style>
+        .regularSize{
+          font-size: small;
+        }
+        .formDivision{
+          padding: 10px; 
+          font-size: small;
+        }
+      </style>
     </head>
     <body>
-      <form name='mturk_form' method='post' id='mturk_form' action='https://www.mturk.com/mturk/externalSubmit'>
-        <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
-		
-		<input type='hidden' value='' name='fileName' id='fileName'/>
 
-        <h1>This is a test question - make your comment</h1>
-        <p><textarea name='comment' cols='80' rows='3'></textarea></p>
-		
-		<h1>Whats your opinion about ur comment?</h1>
-        <p><input name='opinion' cols='80' rows='3'></input></p>
-		
-		<div style="padding: 10px;">
+      <crowd-form name='mturk_form' method='post' id='mturk_form' action='https://www.mturk.com/mturk/externalSubmit'>
+        <input type='hidden' value='' name='assignmentId' id='assignmentId'/>
+        <input type='hidden' value='' name='fileName' id='fileName'/>
+        
+        <h4>Upload a sample with the following aspects</h4>
+        <ul>
+          <li><h5>Must be played on $$__instrument__$$</h5></li>
+          <li><h5>Não sei oq colocar a mais aqui</h5></li>
+        </ul>
+       
+        <full-instructions header="Audio Evaluation Instructions">
+          <p><strong>7-10</strong> Audio quality is excellent or has some little background noises. Notes played have a few or any mistakes</p>
+          <p><strong>4-7</strong> Audio quality is not bad, but background noises are noticeable and impact the experience. There are some wrong played notes, but are not that impactant.</p>
+          <p><strong>1-4</strong>: Audio quality is poor, the content is clearly troll or the sample has so many mistakes that it is impossible to have any further usage</p>
+          <p>When the sentiment is mixed, such as good audio quality and bad notes, do an average evaluation</p>
+        </full-instructions>
+  
+        <short-instructions>
+          <p>Evaluate the sample by its quality, including both audio and song quality. For example, background noises should decrease the evaluation, as well as many notes played badly.</p>
+          <p>If you don't know who is the artist or band, select "I do not know" on the last question</p>
+        </short-instructions>
+
+
+        <div class="formDivision">
+          <p class="regularSize">Upload the Sample<span style="color:red">*</span></p>
           <input id="file" type="file" accept=".mp3, .wav, .aac, .ogg" required/>
-          <button id="upload_file_button" type="button">Upload file</button>
+          <crowd-button id="upload_file_button" type="button" variant="normal">Upload Sample</crowd-button>
           <span id="status">&nbsp;</span>
         </div>
-		
-        <p><input type='submit' id='submitButton' value='Submit' /></p></form>
+
+        <!--<div class="formDivision">
+          <p class="regularSize">Who is the artist/band that created this sample? <span style="color:red">*</span></p>
+          <input type="text" name="creator" label="Artist or Band that created this song"></crowd>
+        </div>-->
+
+        <div class="formDivision">
+          <crowd-input name="creator" label="Artist or Band that created this song" required></crowd-input>
+        </div>
+
+        <div class="formDivision">
+          <p class="regularSize">Do you have experience playing the required instrument? <span style="color:red">*</span></p>
+          <div>
+            <input type="radio" id="yesOption1" name="knowTheInstrument" value="yes" required>
+            <label for="yesOption1">Yes</label>
+          </div>
+          <div>
+            <input type="radio" id="noOption1" name="knowTheInstrument" value="no">
+            <label for="noOption1">No</label>
+          </div>
+        </div>
+
+        <div class="formDivision">
+          <crowd-input name="yearsOfExperience" onkeydown="javascript: return forbiddenKeycodesOnNumberInput.includes(event.keyCode) ? false : true" type="number" label="How many years of experience do you have playing this instrument?" required min="0" max="90"></crowd-input>
+        </div>
+        
+        <p><input type='submit' id='submitButton' value='Submit' style="height:28px; background-color: #ec7211; color: #fff; font-size: 12px; line-height: 20px; border-color: #ec7211; border: 1px solid;"/></p>
+
+      </crowd-form>
+
         <script language='Javascript'>turkSetAssignmentID();
         </script>
 		
 		<script>
-		
+          var forbiddenKeycodesOnNumberInput = [188, 69, 190, 189];
           var albumBucketName = "mturk-worker-uploads-musiccrowd-utad";
           var bucketRegion = "us-east-1";
           var IdentityPoolId = "us-east-1:71c30ffb-c2bb-460c-903a-4504f1f386f5";
-          var uploadStatus = "none";
+          var fileStatus = "none";
 
           AWS.config.update({
             region: bucketRegion,
@@ -55,7 +110,7 @@
           function uploadFile(){
             var files = document.getElementById("file").files;
             if (!files.length) {
-              $("#status").text("Please choose a file to upload first.");
+              setStatus("file_needed");
               return;
             }
             var file = files[0];
@@ -63,33 +118,24 @@
             fileName = encodeFilename(fileName);
 
             var photoKey = fileName;
-            
-            // Use S3 ManagedUpload class as it supports multipart uploads
-            var upload = new AWS.S3.ManagedUpload({
-              params: {
-                Bucket: albumBucketName,
-                Key: photoKey,
-                Body: file,
-                ContentType: "audio/mpeg"
-              }
+
+            setStatus("uploading");
+
+            var params = {
+              Bucket: albumBucketName,
+              Key: photoKey,
+              Body: file,
+              ContentType: "audio/mpeg"
+            };
+
+            s3.putObject(params, (err, res) => {
+              if (err) {
+                setStatus("uploading_error");
+                return;
+              } 
+              document.getElementById("fileName").value = fileName;
+              setStatus("done");
             });
-
-            $("#status").text("Uploading...");
-            uploadStatus = "uploading";
-            
-            var promise = upload.promise();
-
-            promise.then(
-              function(data) {
-                $("#status").text("Success.");
-                document.getElementById("fileName").value = fileName;
-                uploadStatus = "done";
-              },
-              function(err) {
-                uploadStatus = "error";
-                $("#status").text("Error while uploading your file", err.message);
-              }
-            );
 
           }
 
@@ -111,12 +157,44 @@
           window.onload = function() {document.getElementById('submitButton').setAttribute('onclick', 'return validateForm()'); }
 
           function validateForm() {
-            if (uploadStatus != "done"){
+            if (fileStatus != "done"){
+              setStatus("file_required");
               return false;
             }
             return true;
           }
 
+          function setStatus(newStatus){
+            var possibleStatus = {
+              red: {
+                statuses: [
+                  {status: "uploading_error", message: "Error while uploading your file."}, 
+                  {status: "file_needed", message: "Please choose a file to upload first."},
+                  {status: "file_required", message: "This field is required - after choosing the file press the Upload button."}
+                ],
+                color: "red"
+              },
+              green: {
+                statuses: [{status: "done", message: "Success"}],
+                color: "green"
+              },
+              gray: {
+                statuses: [{status: "uploading", message: "Uploading..."}],
+                color: "gray"
+              }
+            }
+
+            fileStatus = newStatus;
+
+            Object.keys(possibleStatus).forEach(_type => {
+              possibleStatus[_type].statuses.forEach(_stats => {
+                if(newStatus == _stats.status){
+                  $("#status").text(_stats.message);
+                  $("#status").css('color', possibleStatus[_type].color);
+                }
+              });
+            });   
+          }
         </script>
 
       </body>
