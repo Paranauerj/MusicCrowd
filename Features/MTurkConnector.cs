@@ -18,7 +18,7 @@ namespace ProjetoCrowdsourcing
         private string PROD_URL { get; } = "https://mturk-requester.us-east-1.amazonaws.com";
         public string url { get; }
         public AmazonMTurkClient mturkClient { get; set; }
-        private BaseContext db { get; set; }
+        protected BaseContext db { get; set; }
 
         public MTurkConnector(BaseContext db)
         {
@@ -31,14 +31,14 @@ namespace ProjetoCrowdsourcing
             this.mturkClient = new AmazonMTurkClient(this.awsAccessKeyId, this.awsSecretAccessKey, config);
         }
 
-        public GetAccountBalanceResponse GetBalance()
+        /*public GetAccountBalanceResponse GetBalance()
         {
             GetAccountBalanceRequest request = new GetAccountBalanceRequest();
             GetAccountBalanceResponse balance = this.mturkClient.GetAccountBalanceAsync(request).Result;
             return balance;
-        }
+        }*/
 
-        public CreateHITResponse CreateQuestionOneHIT(string instrument)
+        /*public CreateHITResponse CreateQuestionOneHIT(string instrument)
         {
             var parameters = new Dictionary<string, string>();
             parameters.Add("$$__instrument__$$", instrument);
@@ -56,9 +56,9 @@ namespace ProjetoCrowdsourcing
             // Console.WriteLine(this.GetURLFromHIT(newHIT.HIT.HITTypeId));
 
             return newHIT;
-        }
+        }*/
 
-        public CreateHITResponse CreateQuestionOneValidationHIT(string filename, string artist)
+        /*public CreateHITResponse CreateQuestionOneValidationHIT(string filename, string artist)
         {
             var parameters = new Dictionary<string, string>();
             parameters.Add("$$__filename__$$", filename);
@@ -67,9 +67,9 @@ namespace ProjetoCrowdsourcing
             var newHIT = this.CreateHIT("question1validation.xml", "Evaluate a song sample", "Evaluate a sample and answer a little few questions about it", "0.10", parameters);
 
             return newHIT;
-        }
+        }*/
 
-        public static string GetURLFromHIT(string HITTypeId)
+        /*public static string GetURLFromHIT(string HITTypeId)
         {
             return "https://workersandbox.mturk.com/projects/" + HITTypeId + "/tasks";
         }
@@ -77,9 +77,9 @@ namespace ProjetoCrowdsourcing
         public static string GetURLFromFileName(string filename)
         {
             return "https://mturk-worker-uploads-musiccrowd-utad.s3.us-east-1.amazonaws.com/" + filename;
-        }
+        }*/
 
-        public CreateHITResponse CreateHIT(string filename, string title, string description, string reward, Dictionary<string, string>? parameters)
+        /*protected CreateHITResponse CreateHIT(string filename, string title, string description, string reward, Dictionary<string, string>? parameters)
         {
             string questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\..\..\..\Questions\" + filename);
 
@@ -105,7 +105,7 @@ namespace ProjetoCrowdsourcing
             CreateHITResponse hit = mturkClient.CreateHITAsync(hitRequest).Result;
 
             return hit;
-        }
+        }*/
 
         public GetHITResponse GetHITDetails(string HITId)
         {

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="ProjetoCrowdsourcing.Models.Assignment">
-    <Position X="1.25" Y="3" Width="2.25" />
+    <Position X="0.5" Y="3" Width="2.25" />
     <Members>
       <Property Name="HIT" Hidden="true" />
       <Property Name="HITId" Hidden="true" />
@@ -16,7 +16,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="ProjetoCrowdsourcing.Models.HIT">
-    <Position X="1" Y="1" Width="3" />
+    <Position X="0.5" Y="0.5" Width="3" />
     <Members>
       <Property Name="Id" Hidden="true" />
     </Members>
@@ -34,7 +34,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="ProjetoCrowdsourcing.Models.ValidationHIT">
-    <Position X="4.75" Y="3" Width="2" />
+    <Position X="4" Y="3" Width="2" />
     <Members>
       <Property Name="Assignment" Hidden="true" />
       <Property Name="AssignmentId" Hidden="true" />
@@ -43,6 +43,55 @@
     <TypeIdentifier>
       <HashCode>QAACAAAAAAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAQAAA=</HashCode>
       <FileName>Models\ValidationHIT.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.Question1">
+    <Position X="7" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Features\Question1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.HITManager">
+    <Position X="8" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Features\HITManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.MTurkConnector" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACIAACAAAAAQAAAAAAAAAAAIAAAIAAAAAgAAAACABAA=</HashCode>
+      <FileName>Features\MTurkConnector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.MTurkUtils">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAgAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Features\MTurkUtils.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.SpeechInteraction" Collapsed="true">
+    <Position X="7" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAQAAAAAABAI=</HashCode>
+      <FileName>Features\SpeechInteraction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.Validation1">
+    <Position X="9" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Features\Validation1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.MturkSynchronizer">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Features\MturkSynchronizer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
