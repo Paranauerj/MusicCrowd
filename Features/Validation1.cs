@@ -19,7 +19,7 @@ namespace ProjetoCrowdsourcing
             parameters.Add("$$__filename__$$", filename);
             parameters.Add("$$__artist__$$", artist);
 
-            var newHIT = this.CreateHIT("question1validation.xml", "Evaluate a song sample", "Evaluate a sample and answer a little few questions about it", "0.10", parameters);
+            var newHIT = this.CreateHIT("question1validation.xml", "Evaluate a song sample", "Evaluate a sample and answer a little few questions about it", "0.10", 1, parameters);
 
             db.ValidationHITs.Add(new Models.ValidationHIT
             {
@@ -31,5 +31,11 @@ namespace ProjetoCrowdsourcing
 
             return newHIT;
         }
+
+        public static bool IsValid(string answer)
+        {
+            return true;
+        }
+
     }
 }

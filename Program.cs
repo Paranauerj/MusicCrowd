@@ -17,7 +17,7 @@ namespace ProjetoCrowdsourcing
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             // Ótimo tutorial
             // https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html
@@ -26,6 +26,15 @@ namespace ProjetoCrowdsourcing
 
             var speechInteraction = new SpeechInteraction();
             var mturkConnector = new MTurkConnector(db);
+            var question1Manager = new Question1(db);
+            var validation1Manager = new Validation1(db);
+
+            var mturkSync = new MturkSynchronizer(mturkConnector, validation1Manager);
+
+            mturkSync.NewAssignmentEvent += MturkSync_NewAssignmentEvent;
+            mturkSync.NewValidationEvent += MturkSync_NewValidationEvent;
+
+            mturkSync.RunAsync();
 
             /*speechInteraction.speechSynthesizer.Speak("Starting project");
 
@@ -40,12 +49,12 @@ namespace ProjetoCrowdsourcing
             // Stops recognition
             */
 
-            /*var question1Manager = new Question1(db);
+            
             var novoHIT = question1Manager.CreateHIT("Piano");
-            Console.WriteLine(MTurkUtils.GetURLFromHIT(novoHIT.HIT.HITTypeId));*/
+            Console.WriteLine(MTurkUtils.GetURLFromHIT(novoHIT.HIT.HITTypeId));
 
 
-            var latestHIT = db.HITs.OrderByDescending(x => x.CreationDate).First();
+            /*var latestHIT = db.HITs.OrderByDescending(x => x.CreationDate).First();
             var assignmentsFromLatestHIT = mturkConnector.GetHITAssignments(latestHIT.HITId);
 
             foreach (var assignment in assignmentsFromLatestHIT)
@@ -67,19 +76,33 @@ namespace ProjetoCrowdsourcing
                 {
 
                 }
-            }
+            }*/
 
 
 
-            
+
 
             /*
              * TODO:
-             * Após gerar o HIT, criar task paralela que vai pesquisar respostas ao HIT a cada n segundos
-             * Quando achar uma resposta, cria HIT para validá-la e cria task paralela para procurar resposta a cada n segundos
              * Quando achar resposta, caso seja válida, marcar a resposta original como válida e apresentar ao utilizador.
              */
 
+            Console.WriteLine("Press any key to stop voice reco.");
+            Console.ReadKey();
+
         }
+
+        private static void MturkSync_NewAssignmentEvent(Models.HIT localHIT, Assignment assignment, CreateHITResponse validationHIT)
+        {
+            //Console.WriteLine("New Assignment Received! Local HIT ID: " + localHIT.Id + " | mturk HIT ID: " + localHIT.HITId + " | mturk assignment ID: " + assignment.HITId);
+            Console.WriteLine("New Assignment Received!");
+            Console.WriteLine("------ Validation HIT: " + MTurkUtils.GetURLFromHIT(validationHIT.HIT.HITTypeId));
+        }
+
+        private static void MturkSync_NewValidationEvent(Models.ValidationHIT localValidationHIT)
+        {
+            Console.WriteLine("New Validation Received!");
+        }
+
     }
 }

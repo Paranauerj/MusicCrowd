@@ -18,7 +18,7 @@ namespace ProjetoCrowdsourcing
         private string PROD_URL { get; } = "https://mturk-requester.us-east-1.amazonaws.com";
         public string url { get; }
         public AmazonMTurkClient mturkClient { get; set; }
-        protected BaseContext db { get; set; }
+        public BaseContext db { get; set; }
 
         public MTurkConnector(BaseContext db)
         {

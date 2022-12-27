@@ -13,7 +13,7 @@ namespace ProjetoCrowdsourcing
         {
         }
 
-        protected CreateHITResponse CreateHIT(string filename, string title, string description, string reward, Dictionary<string, string>? parameters)
+        protected CreateHITResponse CreateHIT(string filename, string title, string description, string reward, int maxAssignments, Dictionary<string, string>? parameters)
         {
             string questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\..\..\..\Questions\" + filename);
 
@@ -32,9 +32,10 @@ namespace ProjetoCrowdsourcing
             hitRequest.Reward = reward;
             hitRequest.AssignmentDurationInSeconds = 60 * 10; // 10 minutos para o worker completar o HIT
             hitRequest.LifetimeInSeconds = 60 * 60 * 24; // 1 dia para ficar indisponível
-            hitRequest.AutoApprovalDelayInSeconds = 60 * 1; // 1 minuto pra auto approval
+            hitRequest.AutoApprovalDelayInSeconds = 5; // 5 segundos pra auto approval
             hitRequest.Question = questionXML;
             hitRequest.Keywords = "music,fl studio,accessibility";
+            hitRequest.MaxAssignments = maxAssignments;
 
             CreateHITResponse hit = mturkClient.CreateHITAsync(hitRequest).Result;
 
