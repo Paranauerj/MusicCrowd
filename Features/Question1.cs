@@ -11,6 +11,10 @@ namespace ProjetoCrowdsourcing
 {
     public class Question1 : HITManager
     {
+        public static string Reward = "0.70";
+        public static string Bonus = "1.00";
+
+
         public Question1(BaseContext db) : base(db)
         {
 
@@ -21,11 +25,12 @@ namespace ProjetoCrowdsourcing
             var parameters = new Dictionary<string, string>();
             parameters.Add("$$__instrument__$$", instrument);
 
-            var newHIT = this.CreateHIT("question1.xml", "Titulo de teste", "Descricao de teste", "0.50", 20, parameters);
+            var newHIT = this.CreateHIT("question1.xml", "Audio Sample Upload", "Upload a instrumental sample with the required parameters", Reward, 20, parameters);
 
             db.HITs.Add(new Models.HIT
             {
-                HITId = newHIT.HIT.HITId
+                HITId = newHIT.HIT.HITId,
+                Instrument = instrument
             });
 
             db.SaveChanges();
@@ -49,12 +54,23 @@ namespace ProjetoCrowdsourcing
                 return false;
             }
 
-            if(response.yearsOfExperience == "-1")
+            if(response.yearsOfExperience < 0)
+            {
+                return false;
+            }
+
+            if (response.knowTheInstrument.yes && response.yearsOfExperience == 0)
+            {
+                return false;
+            }
+
+            if (response.knowTheInstrument.no && response.yearsOfExperience > 0)
             {
                 return false;
             }
 
             return true;
+
         }
 
         public static Question1Response? parseAnswer(string answer)

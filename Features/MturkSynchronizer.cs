@@ -25,9 +25,9 @@ namespace ProjetoCrowdsourcing
             this.validation1 = _validation1;
         }
 
-        public async Task RunAsync()
+        public async Task RunAsync(int secondsToSync)
         {
-            var timer = new PeriodicTimer(TimeSpan.FromSeconds(10));
+            var timer = new PeriodicTimer(TimeSpan.FromSeconds(secondsToSync));
 
             while (await timer.WaitForNextTickAsync())
             {
@@ -65,6 +65,12 @@ namespace ProjetoCrowdsourcing
 
                     this.mTurkConnector.db.Assignments.Add(newAssignment);
                     this.mTurkConnector.db.SaveChanges();
+
+                    // Se a resposta for inválida, não cria hit de validação nem invoca evento
+                    if (!newAssignment.IsValid)
+                    {
+                        continue;
+                    }
                   
                     // Cria o hit de validação para a resposta
                     var assignmentAnswer = Question1.parseAnswer(assignment.Answer);
@@ -90,10 +96,19 @@ namespace ProjetoCrowdsourcing
                 var updatingAssignment = this.mTurkConnector.db.Assignments.Find(notEvaluatedLocalValidationHIT.AssignmentId);
 
                 updatingAssignment.Evaluated = true;
-                updatingAssignment.IsValid = Validation1.IsValid(assignmentsFromValidationHITMTurk.First().Answer);
+                updatingAssignment.IsValid = Validation1.IsValid(assignmentsFromValidationHITMTurk.First().Answer, updatingAssignment.HIT.Instrument);
 
                 this.mTurkConnector.db.Assignments.Update(updatingAssignment);
                 this.mTurkConnector.db.SaveChanges();
+
+                // Se não for válido, não invoca o evento nem dá bonificação
+                if (!updatingAssignment.IsValid)
+                {
+                    continue;
+                }
+
+                var originalAssignmentMTurk = this.mTurkConnector.GetAssignment(updatingAssignment.AssignmentId);
+                this.mTurkConnector.SendBonus(originalAssignmentMTurk.Assignment, Question1.Bonus);
 
                 NewValidationEvent.Invoke(notEvaluatedLocalValidationHIT);
 
