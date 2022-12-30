@@ -34,7 +34,7 @@ namespace MusicCrowdWebAPI.Controllers
             return this._db.HITs.Find(hitID);
         }
 
-        [HttpPost("/hits/")]
+        [HttpPost("/hits")]
         public HIT CreateHIT(string instrument)
         {
             var hit = this._q1m.CreateHIT(instrument);

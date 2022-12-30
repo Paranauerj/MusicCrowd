@@ -22,26 +22,29 @@ namespace ProjetoCrowdsourcing
             Console.WriteLine("------ Music Crowd ---------");
             Console.WriteLine("Interaja através da interface de voz!\n");
             Console.WriteLine("Os comandos disponíveis são:");
+            Console.WriteLine("Ask sample of {instrument}");
             Console.WriteLine("Show my samples");
-            Console.WriteLine("Ask for sample");
-            Console.WriteLine("Quit");
+            Console.WriteLine("Play sample {sampleID}");
+            Console.WriteLine("Back");
         }
 
         public void RenderAskForSample()
         {
+            Console.Clear();
             Console.WriteLine("------ Music Crowd ---------");
-            Console.WriteLine("Peça um dos seguintes instrumentos");
+            Console.WriteLine("Peça um dos seguintes instrumentos através do comando: Ask sample of {instrument}");
             foreach(var instrument in MTurkUtils.AvailableInstruments)
             {
                 Console.WriteLine(instrument);
             }
-            Console.WriteLine("Back");
+            Console.WriteLine("\nBack");
         }
 
         public void RenderShowMySamples()
         {
             Console.Clear();
             Console.WriteLine("------ Music Crowd ---------");
+            Console.WriteLine("My available samples\n");
         }
 
         public void Quit()

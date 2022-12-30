@@ -26,6 +26,12 @@ namespace ProjetoCrowdsourcing
             this.menu = new Menu();
 
             this.Culture = new CultureInfo("en-US");
+
+            if (!OperatingSystem.IsWindows())
+            {
+                throw new Exception();
+            }
+
             this.speechRecoEngine = new SpeechRecognitionEngine(this.Culture);
             this.speechSynthesizer = new SpeechSynthesizer();
 
@@ -53,17 +59,23 @@ namespace ProjetoCrowdsourcing
         {
             // Console.WriteLine("\nSpeech Recognized: \t{0}" + e.Result.Confidence, e.Result.Text);
 
+            if (!OperatingSystem.IsWindows())
+            {
+                throw new Exception();
+            }
+
             if (e.Result.Confidence < 0.85)
                 return;
 
             var result = e.Result.Text;
-            if(e.Result.Text.Contains("ask for sample of"))
+            if(e.Result.Text.Contains("ask sample of"))
             {
-                var instrument = result.Replace("ask for sample of", "");
+                var instrument = result.Replace("ask sample of", "");
                 instrument = instrument.Trim();
 
                 if(!MTurkUtils.AvailableInstruments.Contains(instrument)){
                     this.speechSynthesizer.Speak("we do not have this instrument available yet!");
+                    this.menu.RenderAskForSample();
                     return;
                 }
 
@@ -74,6 +86,7 @@ namespace ProjetoCrowdsourcing
 
             if (e.Result.Text == "show my samples")
             {
+                this.menu.RenderShowMySamples();
                 foreach (var assignment in this.Question1Manager.db.Assignments.Include(x => x.HIT).Where(x => x.IsValid && x.Evaluated))
                 {
                     this.speechSynthesizer.Speak("assignment " + assignment.Id + " - " + assignment.HIT.Instrument);
@@ -112,15 +125,26 @@ namespace ProjetoCrowdsourcing
                 this.play = false;
             }
 
+            if (e.Result.Text == "back")
+            {
+                this.menu.RenderMain();
+            }
+
         }
 
         private void setupGrammar()
         {
+
+            if (!OperatingSystem.IsWindows())
+            {
+                throw new Exception();
+            }
+
             // Set what commands should be listened to
             Choices commands = new Choices();
             foreach (var instrument in MTurkUtils.AvailableInstruments)
             {
-                commands.Add("ask for sample of " + instrument.ToLower());
+                commands.Add("ask sample of " + instrument.ToLower());
             }
             foreach (var assignment in this.Question1Manager.db.Assignments.Include(x => x.HIT).Where(x => x.IsValid && x.Evaluated))
             {
@@ -128,6 +152,7 @@ namespace ProjetoCrowdsourcing
             }
 
             commands.Add("stop");
+            commands.Add("back");
             commands.Add("ask for help");
             commands.Add("show my samples");
 
