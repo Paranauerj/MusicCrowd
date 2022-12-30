@@ -11,13 +11,12 @@ namespace ProjetoCrowdsourcing
         public string assignmentId { get; set; }
         public string creator { get; set; }
         public string filename { get; set; }
-        public KnowTheInstrument knowTheInstrument { get;set; }
-        public string yearsOfExperience { get; set; }
-    }
+        public BinaryChoice knowTheInstrument { get;set; }
+        public int yearsOfExperience { get; set; }
 
-    public class KnowTheInstrument
-    {
-        public string yes { get; set; } 
-        public string no { get; set; }
+        public static explicit operator Question1Response(Type? v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

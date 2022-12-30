@@ -15,7 +15,15 @@ namespace ProjetoCrowdsourcing
 
         protected CreateHITResponse CreateHIT(string filename, string title, string description, string reward, int maxAssignments, Dictionary<string, string>? parameters)
         {
-            string questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\..\..\..\Questions\" + filename);
+            string questionXML = "";
+            try
+            {
+                questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\..\..\..\Questions\" + filename);
+            }
+            catch
+            {
+                questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\ProjetoCrowdsourcing\Questions\" + filename);
+            }
 
             if (parameters != null)
             {

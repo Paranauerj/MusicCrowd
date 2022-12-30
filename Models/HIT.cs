@@ -16,6 +16,9 @@ namespace ProjetoCrowdsourcing.Models
         public string HITId { get; set; }
 
         [Required]
+        public string Instrument { get; set; }
+
+        [Required]
         public DateTime CreationDate { get; set; } = DateTime.Now;
 
         public ICollection<Assignment> Assignments { get; set; }

@@ -23,20 +23,20 @@ namespace ProjetoCrowdsourcing
             // https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html
 
             var db = new BaseContext();
-
-            var speechInteraction = new SpeechInteraction();
             var mturkConnector = new MTurkConnector(db);
             var question1Manager = new Question1(db);
             var validation1Manager = new Validation1(db);
+
+            var speechInteraction = new SpeechInteraction(question1Manager);
 
             var mturkSync = new MturkSynchronizer(mturkConnector, validation1Manager);
 
             mturkSync.NewAssignmentEvent += MturkSync_NewAssignmentEvent;
             mturkSync.NewValidationEvent += MturkSync_NewValidationEvent;
 
-            mturkSync.RunAsync();
+            mturkSync.RunAsync(10);
 
-            /*speechInteraction.speechSynthesizer.Speak("Starting project");
+            speechInteraction.speechSynthesizer.Speak("Starting project");
 
             // Recognizes multiple commands. Without the argument, just recognizes one
             speechInteraction.speechRecoEngine.RecognizeAsync(RecognizeMode.Multiple);
@@ -46,46 +46,12 @@ namespace ProjetoCrowdsourcing
             Console.WriteLine("Press any key to stop voice reco.");
             Console.ReadKey();
 
-            // Stops recognition
-            */
+            
 
             
-            var novoHIT = question1Manager.CreateHIT("Piano");
-            Console.WriteLine(MTurkUtils.GetURLFromHIT(novoHIT.HIT.HITTypeId));
+            /*var novoHIT = question1Manager.CreateHIT("classic guitar");
+            Console.WriteLine(MTurkUtils.GetURLFromHIT(novoHIT.HIT.HITTypeId));*/
 
-
-            /*var latestHIT = db.HITs.OrderByDescending(x => x.CreationDate).First();
-            var assignmentsFromLatestHIT = mturkConnector.GetHITAssignments(latestHIT.HITId);
-
-            foreach (var assignment in assignmentsFromLatestHIT)
-            {
-                // Console.WriteLine(assignment.Answer);
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(assignment.Answer);
-                var answerJSON = xmlDoc.InnerText.ToString();
-                answerJSON = answerJSON.Replace("taskAnswers", "");
-                answerJSON = answerJSON.Remove(0, 1);
-                answerJSON = answerJSON.Remove(answerJSON.Length - 1, 1);
-
-                try
-                {
-                    Question1Response deserializedProduct = JsonConvert.DeserializeObject<Question1Response>(answerJSON);
-                    Console.WriteLine(MTurkUtils.GetURLFromFileName(deserializedProduct.filename));
-                }
-                catch (Exception e)
-                {
-
-                }
-            }*/
-
-
-
-
-
-            /*
-             * TODO:
-             * Quando achar resposta, caso seja válida, marcar a resposta original como válida e apresentar ao utilizador.
-             */
 
             Console.WriteLine("Press any key to stop voice reco.");
             Console.ReadKey();

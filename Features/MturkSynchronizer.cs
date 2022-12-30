@@ -10,7 +10,7 @@ namespace ProjetoCrowdsourcing
     public delegate void NotifyAssignment(Models.HIT localHIT, Amazon.MTurk.Model.Assignment assignment, Amazon.MTurk.Model.CreateHITResponse validationHIT);
     public delegate void NotifyValidation(Models.ValidationHIT localValidationHIT);
 
-    class MturkSynchronizer
+    public class MturkSynchronizer
     {
         private MTurkConnector mTurkConnector { get; set; }
         private Validation1 validation1 { get; set; }

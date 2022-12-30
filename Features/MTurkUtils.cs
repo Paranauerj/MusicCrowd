@@ -10,7 +10,7 @@ using System.Xml;
 namespace ProjetoCrowdsourcing
 {
 
-    class MTurkUtils : MTurkConnector
+    public class MTurkUtils : MTurkConnector
     {
         
         public static List<string> AvailableInstruments { get; } = new List<string>{ "electric guitar", "classic guitar", "piano", "bass", "violin", "drums", "saxophone", "flute" };
