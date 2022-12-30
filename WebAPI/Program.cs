@@ -9,6 +9,7 @@ var mturkSync = new MturkSynchronizer(mturkConnector, validation1Manager);
 mturkSync.NewAssignmentEvent += MturkSync_NewAssignmentEvent;
 mturkSync.NewValidationEvent += MturkSync_NewValidationEvent;
 
+// Verifica novas respostas de hits e novas validações a cada 10 segundos - subrotina
 mturkSync.RunAsync(10);
 
 /*var novoHIT = question1Manager.CreateHIT("classic guitar");

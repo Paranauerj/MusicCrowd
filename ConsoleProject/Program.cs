@@ -41,7 +41,7 @@ namespace ProjetoCrowdsourcing
             // Recognizes multiple commands. Without the argument, just recognizes one
             speechInteraction.speechRecoEngine.RecognizeAsync(RecognizeMode.Multiple);
             Console.WriteLine("Starting to listen commands...");
-            //speechInteraction.StartMenu();
+            speechInteraction.StartMenu();
 
             // Keep program listening for commands
             Console.WriteLine("Press any key to stop voice reco.");
