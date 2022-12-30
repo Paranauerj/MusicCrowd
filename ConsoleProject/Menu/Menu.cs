@@ -13,7 +13,7 @@ namespace ProjetoCrowdsourcing
         public void Run()
         {
             this.RenderMain();
-            this.RenderAskForSample();
+            //this.RenderAskForSample();
         }
 
         public void RenderMain()
