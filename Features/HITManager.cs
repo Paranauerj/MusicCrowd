@@ -22,7 +22,7 @@ namespace ProjetoCrowdsourcing
             }
             catch
             {
-                questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\ProjetoCrowdsourcing\Questions\" + filename);
+                questionXML = System.IO.File.ReadAllText(Environment.CurrentDirectory + @"..\..\MusicCrowd\Questions\" + filename);
             }
 
             if (parameters != null)

@@ -38,7 +38,11 @@ namespace ProjetoCrowdsourcing
             speechRecoEngine.SpeechRecognized += SpeechRecoEngine_SpeechRecognized;
 
             this.speechRecoEngine.SetInputToDefaultAudioDevice();
+            
+        }
 
+        public void StartMenu()
+        {
             this.menu.Run();
         }
 
