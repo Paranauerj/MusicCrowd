@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "8WzWPAYK8JEJlLLIaL1//IEQh+VTfbBz59kMjxCce+0=",
+  "Source": "MusicCrowdWebAPI",
+  "BasePath": "_content/MusicCrowdWebAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
