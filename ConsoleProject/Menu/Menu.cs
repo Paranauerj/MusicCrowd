@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,56 +8,101 @@ using System.Threading.Tasks;
 
 namespace ProjetoCrowdsourcing
 {
-    public class Menu
+    public abstract class Menu
     {
-        private bool loop = true;
+        public Question1 Question1Manager { get; set; }
+        protected MenuRender menu { get; set; }
+        protected bool play { get; set; }
 
-        public void Run()
+        public Menu(Question1 _question1Manager)
         {
-            this.RenderMain();
-            //this.RenderAskForSample();
+            Question1Manager = _question1Manager;
+            menu = new MenuRender();
         }
 
-        public void RenderMain()
-        {
-            Console.Clear();
-            Console.WriteLine("------ Music Crowd ---------");
-            Console.WriteLine("Interaja através da interface de voz!\n");
-            Console.WriteLine("Os comandos disponíveis são:");
-            Console.WriteLine("Ask sample of {instrument}");
-            Console.WriteLine("Show my samples");
-            Console.WriteLine("Play sample {sampleID}");
-            Console.WriteLine("Back");
-        }
+        protected abstract void Say(string s);
 
-        public void RenderAskForSample()
-        {
-            Console.Clear();
-            Console.WriteLine("------ Music Crowd ---------");
-            Console.WriteLine("Peça um dos seguintes instrumentos através do comando: Ask sample of {instrument}");
-            foreach(var instrument in MTurkUtils.AvailableInstruments)
-            {
-                Console.WriteLine(instrument);
-            }
-            Console.WriteLine("\nBack");
-        }
-
-        public void RenderShowMySamples()
-        {
-            Console.Clear();
-            Console.WriteLine("------ Music Crowd ---------");
-            Console.WriteLine("My available samples\n");
-        }
+        public abstract void StartMenu();
 
         public void Quit()
         {
-            this.loop = false;
+            Environment.Exit(0);
         }
 
-        public void Pause()
+        protected void AskForHelpMenu()
         {
-            Console.WriteLine("Press any key to continue");
-            Console.ReadKey();
+            this.Say("These are you commands");
+            this.Say("1- Ask sample of {instrument}");
+            this.Say("2- Show my samples");
+            this.Say("3- Play sample {sampleID}");
+            this.Say("4- Back");
+            this.Say("5- Quit");
         }
+
+        protected void AskSampleOfMenu(string instrument)
+        {
+            if (!MTurkUtils.AvailableInstruments.Contains(instrument))
+            {
+                this.Say("we do not have this instrument available yet!");
+                menu.RenderAskForSample();
+                return;
+            }
+
+            this.Say("asking the crowd");
+            var createdHIT = Question1Manager.CreateHIT(instrument);
+            Console.WriteLine(MTurkUtils.GetURLFromHIT(createdHIT.HIT.HITTypeId));
+        }
+
+        protected void ShowMySamplesMenu(bool say)
+        {
+            menu.RenderShowMySamples();
+            foreach (var assignment in Question1Manager.db.Assignments.Include(x => x.HIT).Where(x => x.IsValid && x.Evaluated))
+            {
+                Console.WriteLine("assignment " + assignment.Id + " - " + assignment.HIT.Instrument);
+                if (say)
+                {
+                    this.Say("assignment " + assignment.Id + " - " + assignment.HIT.Instrument);
+                }
+            }
+        }
+
+        protected void PlaySample(string sampleID)
+        {
+            var localAssignment = Question1Manager.db.Assignments.Include(x => x.HIT).Where(x => x.IsValid && x.Evaluated && x.Id.ToString() == sampleID).First();
+            if (localAssignment == null)
+            {
+                this.Say("this assignment is not available");
+            }
+
+            var assignmentMTurk = Question1Manager.GetAssignment(localAssignment.AssignmentId);
+            var answer = Question1.parseAnswer(assignmentMTurk.Assignment.Answer);
+
+            this.Say("playing");
+
+            var url = MTurkUtils.GetURLFromFileName(answer.filename);
+            new Task(() => { playAudio(url); }).Start();
+        }
+
+        protected void playAudio(string url)
+        {
+            using (var mf = new MediaFoundationReader(url))
+            using (var wo = new WasapiOut())
+            {
+                wo.Init(mf);
+                play = true;
+                wo.Play();
+
+                while (wo.PlaybackState == PlaybackState.Playing)
+                {
+                    if (!play)
+                    {
+                        wo.Stop();
+                        break;
+                    }
+                    Thread.Sleep(1000);
+                }
+            }
+        }
+
     }
 }

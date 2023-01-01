@@ -6,6 +6,9 @@
   <Comment CommentText="Classes de Interação com MTurk">
     <Position X="10.438" Y="0.5" Height="0.469" Width="1.731" />
   </Comment>
+  <Comment CommentText="Classes de Construção do Menu">
+    <Position X="18.532" Y="0.5" Height="0.469" Width="1.731" />
+  </Comment>
   <Class Name="ProjetoCrowdsourcing.Models.Assignment">
     <Position X="0.75" Y="4.25" Width="2.25" />
     <Members>
@@ -54,7 +57,7 @@
   <Class Name="ProjetoCrowdsourcing.Question1">
     <Position X="7" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAIAAAAAAAAgAAAAAAgAAAAAAACAAAAAAAQA=</HashCode>
       <FileName>Features\Question1.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -68,28 +71,21 @@
   <Class Name="ProjetoCrowdsourcing.MTurkConnector" Collapsed="true">
     <Position X="10.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACIAACAAAAAQAAAAAAAAAAAIAAAIAAABAgAAAACABAA=</HashCode>
+      <HashCode>ACIAACAAAAAQAAIAAAAAAAAIAAAIAAABAgAAAACABAA=</HashCode>
       <FileName>Features\MTurkConnector.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ProjetoCrowdsourcing.MTurkUtils">
     <Position X="12.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAgAAAAAIAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAgAAAAAIAAAAAAQAAAAA=</HashCode>
       <FileName>Features\MTurkUtils.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="ProjetoCrowdsourcing.SpeechInteraction" Collapsed="true">
-    <Position X="6.5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAQAAAAAABAI=</HashCode>
-      <FileName>Features\SpeechInteraction.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ProjetoCrowdsourcing.Validation1">
     <Position X="9" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAACAAAAAAAQA=</HashCode>
       <FileName>Features\Validation1.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -102,6 +98,43 @@
     <TypeIdentifier>
       <HashCode>AEAAAQAAAIAEAAAAAAAAAQAAAAAAAAAAAAAAAAABAQA=</HashCode>
       <FileName>Features\MturkSynchronizer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.Menu">
+    <Position X="17.5" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ACAAAQAAAAAABAQAAAAAAAgBAACAAAABABAAAAAAAQA=</HashCode>
+      <FileName>Menu\Menu.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="menu" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.MenuRender">
+    <Position X="21" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAACAAAAAAAAAAAAAgQAAABAAAAAAAAAQI=</HashCode>
+      <FileName>Menu\MenuRender.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.SpeechInteractionMenu">
+    <Position X="18.75" Y="4.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>ABAAAACAAAAABAAAAAAAAAAAAQAAAAABAQAAAAAABAI=</HashCode>
+      <FileName>Menu\SpeechInteraction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProjetoCrowdsourcing.TextMenu">
+    <Position X="16.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Menu\TextMenu.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

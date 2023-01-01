@@ -26,33 +26,41 @@ namespace ProjetoCrowdsourcing
             var mturkConnector = new MTurkConnector(db);
             var question1Manager = new Question1(db);
             var validation1Manager = new Validation1(db);
-
-            var speechInteraction = new SpeechInteraction(question1Manager);
-
+            // var speechInteractionMenu = new SpeechInteractionMenu(question1Manager);
             var mturkSync = new MturkSynchronizer(mturkConnector, validation1Manager);
 
             mturkSync.NewAssignmentEvent += MturkSync_NewAssignmentEvent;
             mturkSync.NewValidationEvent += MturkSync_NewValidationEvent;
 
-            mturkSync.RunAsync(10);
+            _ = mturkSync.RunAsync(10);
 
-            speechInteraction.speechSynthesizer.Speak("Starting project");
+            // Running Menu
+            Menu menu = null;
+            int input = 0;
 
-            // Recognizes multiple commands. Without the argument, just recognizes one
-            speechInteraction.speechRecoEngine.RecognizeAsync(RecognizeMode.Multiple);
-            Console.WriteLine("Starting to listen commands...");
-            speechInteraction.StartMenu();
+            while(input != 1 && input != 2)
+            {
+                Console.WriteLine("Qual tipo de interface prefere?\n1- Voz\n2- Texto");
+                input = Convert.ToInt32(Console.ReadLine());
+
+                if(input == 1)
+                {
+                    menu = new SpeechInteractionMenu(question1Manager);
+                }
+                if (input == 2)
+                {
+                    menu = new TextMenu(question1Manager);
+                }
+            }
+            
+            menu.StartMenu();
 
             // Keep program listening for commands
             Console.WriteLine("Press any key to stop voice reco.");
             Console.ReadKey();
-
-            
-
             
             /*var novoHIT = question1Manager.CreateHIT("classic guitar");
             Console.WriteLine(MTurkUtils.GetURLFromHIT(novoHIT.HIT.HITTypeId));*/
-
 
             Console.WriteLine("Press any key to stop voice reco.");
             Console.ReadKey();
