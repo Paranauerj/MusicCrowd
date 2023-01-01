@@ -16,5 +16,4 @@ Para um funcionamento correto do sintetizador e reconhecedor de voz, é necessá
 | Microsoft.EntityFrameworkCore | v7.0.0 |
 | AWSSDK.MTurk | v3.7.100.20 |
 | Newtonsoft.Json | v13.0.2 |
-
-
+| NAudio | v2.1.0 |
