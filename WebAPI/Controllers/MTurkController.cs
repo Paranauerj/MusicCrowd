@@ -35,10 +35,16 @@ namespace MusicCrowdWebAPI.Controllers
         }
 
         [HttpPost("/hits")]
-        public HIT CreateHIT(string instrument)
+        public CreatedHITReturn CreateHIT(string instrument)
         {
             var hit = this._q1m.CreateHIT(instrument);
-            return this._db.HITs.OrderBy(x => x.CreationDate).First();
+            var localHIT = this._db.HITs.OrderBy(x => x.CreationDate).Last();
+
+            return new CreatedHITReturn
+            {
+                hit = localHIT,
+                link = MTurkUtils.GetURLFromHIT(hit.HIT.HITTypeId)
+            };
         }
 
         [HttpGet("/hits-with-valid-answers")]
@@ -83,7 +89,7 @@ namespace MusicCrowdWebAPI.Controllers
         {
             var answers = new List<SamplesReturn>();
             
-            foreach(var assignment in this._db.Assignments.Include(x => x.HIT))
+            foreach(var assignment in this._db.Assignments.Include(x => x.HIT).Where(x => x.IsValid && x.Evaluated))
             {
                 var mturkAssignment = this._mtc.GetAssignment(assignment.AssignmentId);
                 var answer = Question1.parseAnswer(mturkAssignment.Assignment.Answer);
