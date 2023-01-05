@@ -26,7 +26,7 @@ namespace ProjetoCrowdsourcing
             var mturkConnector = new MTurkConnector(db);
             var question1Manager = new Question1(db);
             var validation1Manager = new Validation1(db);
-            // var speechInteractionMenu = new SpeechInteractionMenu(question1Manager);
+            var speechInteractionMenu = new SpeechInteractionMenu(question1Manager);
             var mturkSync = new MturkSynchronizer(mturkConnector, validation1Manager);
 
             mturkSync.NewAssignmentEvent += MturkSync_NewAssignmentEvent;
@@ -38,14 +38,18 @@ namespace ProjetoCrowdsourcing
             Menu menu = null;
             int input = 0;
 
-            while(input != 1 && input != 2)
+            Console.WriteLine("Bem-vindo ao crowdmusician - A plataforma de auxílio a pessoas com deficiência visual. Selecione uma opção abaixo");
+            speechInteractionMenu.speechSynthesizer.Speak("Bem-vindo ao crowdmusician - A plataforma de auxílio a pessoas com deficiência visual. Selecione uma opção. 1: interface de voz. 2: interface de texto");
+
+
+            while (input != 1 && input != 2)
             {
                 Console.WriteLine("Qual tipo de interface prefere?\n1- Voz\n2- Texto");
                 input = Convert.ToInt32(Console.ReadLine());
 
                 if(input == 1)
                 {
-                    menu = new SpeechInteractionMenu(question1Manager);
+                    menu = speechInteractionMenu;
                 }
                 if (input == 2)
                 {
