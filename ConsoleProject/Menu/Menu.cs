@@ -69,10 +69,11 @@ namespace ProjetoCrowdsourcing
 
         protected void PlaySample(string sampleID)
         {
-            var localAssignment = Question1Manager.db.Assignments.Include(x => x.HIT).Where(x => x.IsValid && x.Evaluated && x.Id.ToString() == sampleID).First();
+            var localAssignment = Question1Manager.db.Assignments.Include(x => x.HIT).Where(x => x.IsValid && x.Evaluated && x.Id.ToString() == sampleID).FirstOrDefault();
             if (localAssignment == null)
             {
                 this.Say("this assignment is not available");
+                return;
             }
 
             var assignmentMTurk = Question1Manager.GetAssignment(localAssignment.AssignmentId);
