@@ -6,8 +6,8 @@ var question1Manager = new Question1(db);
 var validation1Manager = new Validation1(db);
 var mturkSync = new MturkSynchronizer(mturkConnector, validation1Manager);
 
-mturkSync.NewAssignmentEvent += MturkSync_NewAssignmentEvent;
-mturkSync.NewValidationEvent += MturkSync_NewValidationEvent;
+MturkSynchronizer.NewAssignmentEvent += MturkSync_NewAssignmentEvent;
+MturkSynchronizer.NewValidationEvent += MturkSync_NewValidationEvent;
 
 // Verifica novas respostas de hits e novas validações a cada 10 segundos - subrotina
 mturkSync.RunAsync(10);

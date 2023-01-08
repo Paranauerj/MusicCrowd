@@ -31,12 +31,13 @@ namespace ProjetoCrowdsourcing
 
         protected void AskForHelpMenu()
         {
-            this.Say("These are you commands");
+            this.Say("These are your commands");
             this.Say("1- Ask sample of {instrument}");
             this.Say("2- Show my samples");
             this.Say("3- Play sample {sampleID}");
             this.Say("4- Back");
             this.Say("5- Quit");
+            this.Say("You can also use 'stop' to stop a sample");
         }
 
         protected void AskSampleOfMenu(string instrument)

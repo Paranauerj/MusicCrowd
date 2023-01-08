@@ -29,8 +29,8 @@ namespace ProjetoCrowdsourcing
             var speechInteractionMenu = new SpeechInteractionMenu(question1Manager);
             var mturkSync = new MturkSynchronizer(mturkConnector, validation1Manager);
 
-            mturkSync.NewAssignmentEvent += MturkSync_NewAssignmentEvent;
-            mturkSync.NewValidationEvent += MturkSync_NewValidationEvent;
+            MturkSynchronizer.NewAssignmentEvent += MturkSync_NewAssignmentEvent;
+            MturkSynchronizer.NewValidationEvent += MturkSync_NewValidationEvent;
 
             _ = mturkSync.RunAsync(10);
 
@@ -39,7 +39,7 @@ namespace ProjetoCrowdsourcing
             int input = 0;
 
             Console.WriteLine("Bem-vindo ao crowdmusician - A plataforma de auxílio a pessoas com deficiência visual. Selecione uma opção abaixo");
-            speechInteractionMenu.speechSynthesizer.Speak("Bem-vindo ao crowdmusician - A plataforma de auxílio a pessoas com deficiência visual. Selecione uma opção. 1: interface de voz. 2: interface de texto");
+            speechInteractionMenu.speechSynthesizer.SpeakAsync("Welcome to crowdmusician - A platform for aiding people with visual impairment. Select an option with the keyboard. 1: Voice interface. 2: Text interface. If you need help, say ask for help");
 
 
             while (input != 1 && input != 2)
@@ -56,7 +56,8 @@ namespace ProjetoCrowdsourcing
                     menu = new TextMenu(question1Manager);
                 }
             }
-            
+
+            speechInteractionMenu.speechSynthesizer.SpeakAsyncCancelAll();
             menu.StartMenu();
 
             // Keep program listening for commands

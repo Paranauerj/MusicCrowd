@@ -35,6 +35,15 @@ namespace ProjetoCrowdsourcing
             // Triggers function when command is recognized - maybe put outside this class
             speechRecoEngine.SpeechRecognized += SpeechRecoEngine_SpeechRecognized;
             speechRecoEngine.SetInputToDefaultAudioDevice();
+
+            // Quando encontrar um novo sample validado, recarrega a gramática
+            MturkSynchronizer.NewValidationEvent += MturkSynchronizer_NewValidationEvent;
+
+        }
+
+        private void MturkSynchronizer_NewValidationEvent(Models.ValidationHIT localValidationHIT)
+        {
+            this.setupGrammar();
         }
 
         protected override void Say(string s)

@@ -15,8 +15,8 @@ namespace ProjetoCrowdsourcing
         private MTurkConnector mTurkConnector { get; set; }
         private Validation1 validation1 { get; set; }
 
-        public event NotifyAssignment NewAssignmentEvent;
-        public event NotifyValidation NewValidationEvent;
+        public static event NotifyAssignment NewAssignmentEvent;
+        public static event NotifyValidation NewValidationEvent;
 
 
         public MturkSynchronizer(MTurkConnector _mTurkConnector, Validation1 _validation1)
